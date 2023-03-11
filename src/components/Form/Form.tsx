@@ -7,9 +7,11 @@ import { createPost, updatePost } from "../../actions/posts";
 interface FormProps {
     currentId?: number | null;
     setCurrentId: React.Dispatch<React.SetStateAction< number | null >>,
+    open: boolean;
+    setOpen: React.Dispatch<React.SetStateAction< boolean >>;
 }
 
-const Form = ({ currentId, setCurrentId }: FormProps) => {
+const Form = ({ currentId, setCurrentId, open, setOpen }: FormProps) => {
   const randomId = Math.random().toString(36).slice(2, 10);
 
   const post = useSelector((state: any) =>
@@ -26,10 +28,17 @@ const Form = ({ currentId, setCurrentId }: FormProps) => {
   
   const dispatch: any = useDispatch();
 
+  const clearForm = () => {
+    setPostData({
+      title: "",
+      body: ""
+    })
+  };
+
+  console.log(postData.title)
+
   const clear = () => {
     setCurrentId(0);
-    postData.title = "";
-    postData.body ="";
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -42,6 +51,8 @@ const Form = ({ currentId, setCurrentId }: FormProps) => {
       dispatch(createPost(postData));
       clear();
     }
+
+    setOpen(!open)
   };
  
   console.log(typeof postData, postData)
@@ -75,7 +86,7 @@ const Form = ({ currentId, setCurrentId }: FormProps) => {
           variant="contained"
           color="secondary"
           size="small"
-          onClick={clear}
+          onClick={clearForm}
         >
           Clear
         </Button>
