@@ -5,20 +5,24 @@ import { persistReducer, persistStore } from "redux-persist";
 
 import thunk from "redux-thunk";
 import storage from "redux-persist/lib/storage";
-import reducers from "../reducers"
+import { rootReducer, RootReducer } from "../reducers"
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
 
 const persistConfig = {
 	key: "root",
 	storage,
-	reducers,
+	rootReducer,
+	stateReconciler: autoMergeLevel2,
 };
 
-const persistedReducer = persistReducer(persistConfig, reducers);
+
+const persistedReducer = persistReducer<RootReducer>(persistConfig, rootReducer);
 
 export const store = configureStore({
-    reducer: persistedReducer,
+	reducer: persistedReducer,
     middleware: [thunk],
+	
 })
 
 

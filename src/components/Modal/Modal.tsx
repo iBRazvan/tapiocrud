@@ -39,7 +39,11 @@ const ModalComponent = ({ currentId, setCurrentId, open, setOpen }: ModalProps) 
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Form currentId={currentId} setCurrentId={setCurrentId} />
+          <Form 
+            currentId={currentId} 
+            setCurrentId={setCurrentId} 
+            open={open} 
+            setOpen={setOpen}/>
         </Box>
       </Modal>
     </div>
