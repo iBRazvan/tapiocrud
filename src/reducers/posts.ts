@@ -7,12 +7,12 @@ export interface Post {
 }
 
 
-const posts = (posts :Post[] = [], action: any) => {
+const posts = (posts :any[] = [], action: any) => {
   switch (action.type) {
     case FETCH_ALL:
       return action.payload;
     case CREATE:
-      return [...posts, action.payload];
+      return [action.payload, ...posts,];
     case UPDATE:
       return posts.map((post) =>
         post.id === action.payload.id ? action.payload : post

@@ -1,41 +1,62 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Button, Typography, Paper } from "@mui/material";
+import { alpha, styled } from '@mui/material/styles';
+import { TextField, Button, Typography, Paper, Box } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
 import { createPost, updatePost } from "../../actions/posts";
+import { setSnackbar } from "../../actions/snackbar";
+
+const CssTextField = styled(TextField)({
+  '& label.Mui-focused': {
+    color: 'orange',
+  },
+  '& .MuiInput-underline:after': {
+    borderBottomColor: 'grey',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: 'grey',
+    },
+    '&:hover fieldset': {
+      borderColor: 'orange',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: 'orange',
+    },
+  },
+});
 
 interface FormProps {
-    currentId?: number | null;
-    setCurrentId: React.Dispatch<React.SetStateAction< number | null >>,
-    open: boolean;
-    setOpen: React.Dispatch<React.SetStateAction< boolean >>;
+  currentId?: number | null;
+  setCurrentId: React.Dispatch<React.SetStateAction<number | null>>;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Form = ({ currentId, setCurrentId, open, setOpen }: FormProps) => {
-  const randomId = Math.random().toString(36).slice(2, 10);
+  const randomId = Math.floor(Math.random() * 1000) + 100;
 
   const post = useSelector((state: any) =>
-  currentId
-  ? state.posts.find((p: any) => p.id === currentId) 
-  : {
-    id: randomId,
-    title: "",
-    body: "",
-  },
+    currentId
+      ? state.posts.find((p: any) => p.id === currentId)
+      : {
+          id: randomId,
+          title: "",
+          body: "",
+        }
   );
-  
+
   const [postData, setPostData] = useState(post);
-  
+
   const dispatch: any = useDispatch();
 
   const clearForm = () => {
+    dispatch(setSnackbar(true, "info", "Cleared Successfully"));
     setPostData({
       title: "",
-      body: ""
-    })
+      body: "",
+    });
   };
-
-  console.log(postData.title)
 
   const clear = () => {
     setCurrentId(0);
@@ -46,31 +67,36 @@ const Form = ({ currentId, setCurrentId, open, setOpen }: FormProps) => {
 
     if (currentId) {
       dispatch(updatePost(currentId, postData));
+      dispatch(setSnackbar(true, "success", "Edited Successfully"));
       clear();
     } else {
       dispatch(createPost(postData));
+      dispatch(setSnackbar(true, "success", "Created Successfully"));
       clear();
     }
 
-    setOpen(!open)
+    setOpen(!open);
   };
- 
-  console.log(typeof postData, postData)
-  return (
-    <Paper>
- 
-      <form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Typography>{currentId ? "Editing" : "Creating"} a Post</Typography>
 
-        <TextField
+  return (
+    <Paper className="outline-none !shadow-none">
+      <form autoComplete="off" noValidate onSubmit={handleSubmit}>
+        <Typography className="pb-2">
+          {currentId ? "Editing" : "Creating"} a Post
+        </Typography>
+
+        <CssTextField
+          style={{marginBottom: 5, marginTop: 5, }}
           name="title"
           variant="outlined"
           label="Title"
           fullWidth
+         
           value={postData.title}
-          onChange={(e) => setPostData({ ...postData, title: e.target.value})}
+          onChange={(e) => setPostData({ ...postData, title: e.target.value })}
         />
-        <TextField
+        <CssTextField
+        style={{marginBottom: 5, marginTop: 5}}
           name="description"
           variant="outlined"
           label="Description"
@@ -78,20 +104,26 @@ const Form = ({ currentId, setCurrentId, open, setOpen }: FormProps) => {
           value={postData.body}
           onChange={(e) => setPostData({ ...postData, body: e.target.value })}
         />
-
-        <Button variant="contained" color="primary" size="large" type="submit">
-          Submit
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="small"
-          onClick={clearForm}
-        >
-          Clear
-        </Button>
+        <Box className="flex flex-row justify-between outline-none !shadow-none  pt-5">
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            type="submit"
+            style={{ backgroundColor: "orange" }}
+          >
+            Submit
+          </Button>
+          <Button
+            variant="contained"
+            style={{ backgroundColor: "black" }}
+            size="large"
+            onClick={clearForm}
+          >
+            Clear
+          </Button>
+        </Box>
       </form>
-  
     </Paper>
   );
 };

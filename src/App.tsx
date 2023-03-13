@@ -7,6 +7,7 @@ import { getPosts } from "./actions/posts";
 import PostsList from "./components/PostsList/PostsList";
 import Modal from "./components/Modal/Modal";
 import Fab from "@mui/material/Fab";
+import SnackbarComponent from "./components/Snackbar/Snackbar";
 import AddIcon from "@mui/icons-material/Add";
 
 // interface IState {
@@ -28,7 +29,7 @@ const App: React.FC = () => {
   return (
     <Container maxWidth="lg">
       <AppBar
-        className="flex flex-col justify-center items-center my-8 rounded-2xl"
+        className="flex flex-col justify-center items-center my-8 rounded-2xl !bg-slate-800"
         position="static"
       >
         <Typography variant="h2" align="center">
@@ -37,14 +38,14 @@ const App: React.FC = () => {
       </AppBar>
 
       <Fab
-        className="!sticky z-10"
-        style={{ top: "90vh" }}
+        className="!sticky z-10 !bg-slate-800"
+        style={{ top: "90vh", }}
         color="primary"
         aria-label="add"
       >
         <AddIcon onClick={() => setOpen(()=> !open)}/>
       </Fab>
-
+      <SnackbarComponent/>
       <Grow in>
         <Container>
           <Grid

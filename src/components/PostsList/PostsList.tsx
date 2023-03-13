@@ -19,7 +19,6 @@ import Post from './Post/Post'
 const PostsList = ({ setCurrentId, open, setOpen}: PostsListProps) => {
   const posts = useSelector((state: any) => state.posts)
 
-
   return !posts.length ? (
       <CircularProgress />
     ) : (
@@ -29,8 +28,8 @@ const PostsList = ({ setCurrentId, open, setOpen}: PostsListProps) => {
         spacing={3}
         className="flex items-center"
       >
-        {posts.map((post: post) => (
-          <Grid key={post.id} item xs={12} sm={6}>
+        {posts.map((post: post, index: number) => (
+          <Grid key={index} item xs={12} sm={6}>
             <Post post={post} setCurrentId={setCurrentId} open={open} setOpen={setOpen}/>
           </Grid>
         ))}
